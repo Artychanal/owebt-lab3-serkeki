@@ -45,7 +45,13 @@ def load_settings() -> Settings:
     if not webhook_path.startswith("/"):
         webhook_path = f"/{webhook_path}"
 
-    webhook_base_url = os.getenv("WEBHOOK_BASE_URL", "").strip() or None
+    # Render provides the service URL automatically. Prefer it over a manually
+    # configured value so a renamed/recreated service cannot keep a stale URL.
+    webhook_base_url = (
+        os.getenv("RENDER_EXTERNAL_URL", "").strip()
+        or os.getenv("WEBHOOK_BASE_URL", "").strip()
+        or None
+    )
     webhook_secret = os.getenv("WEBHOOK_SECRET", "").strip() or None
 
     if run_mode == "webhook":
@@ -77,4 +83,3 @@ def load_settings() -> Settings:
         webhook_secret=webhook_secret,
         port=port,
     )
-

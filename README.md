@@ -69,8 +69,6 @@ pytest
 
    - `TELEGRAM_BOT_TOKEN` — токен від BotFather;
    - `GEMINI_API_KEY` — ключ Google AI Studio;
-   - `WEBHOOK_BASE_URL` — публічна адреса Render без `/` наприкінці,
-     наприклад `https://lab3-telegram-ai-bot.onrender.com`.
    - `WEBHOOK_SECRET` — довільний секрет лише з латинських літер, цифр,
      `_` і `-`, наприклад `lab3_webhook_secret_2026`.
 
@@ -84,6 +82,8 @@ pytest
 Webhook реєструється автоматично під час запуску застосунку. Сервер перевіряє
 `WEBHOOK_SECRET` у кожному запиті Telegram. Не використовуйте в ньому пробіли,
 крапки, `+`, `/` або `=` — Telegram такі символи не приймає.
+Адресу webhook застосунок автоматично отримує зі стандартної змінної Render
+`RENDER_EXTERNAL_URL`; вводити `WEBHOOK_BASE_URL` на Render не потрібно.
 
 ## Змінні середовища
 
