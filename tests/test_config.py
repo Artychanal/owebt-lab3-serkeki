@@ -16,6 +16,17 @@ def test_load_settings_for_polling(monkeypatch: pytest.MonkeyPatch) -> None:
     assert settings.gemini_model == "gemini-3.5-flash-lite"
 
 
+def test_allowed_user_ids_are_parsed(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "123456:test-token")
+    monkeypatch.setenv("GEMINI_API_KEY", "test-gemini-key")
+    monkeypatch.setenv("RUN_MODE", "polling")
+    monkeypatch.setenv("ALLOWED_USER_IDS", "686381696, 123456789")
+
+    settings = load_settings()
+
+    assert settings.allowed_user_ids == frozenset({686381696, 123456789})
+
+
 def test_webhook_requires_https(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setenv("TELEGRAM_BOT_TOKEN", "123456:test-token")
     monkeypatch.setenv("GEMINI_API_KEY", "test-gemini-key")

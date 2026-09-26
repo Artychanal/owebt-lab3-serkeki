@@ -14,6 +14,7 @@ class Settings:
     bot_token: str
     gemini_api_key: str
     gemini_model: str
+    allowed_user_ids: frozenset[int]
     run_mode: str
     webhook_base_url: str | None
     webhook_path: str
@@ -32,6 +33,24 @@ def _required(name: str) -> str:
     if not value:
         raise ConfigError(f"Environment variable {name} is required")
     return value
+
+
+def _parse_user_ids(value: str) -> frozenset[int]:
+    if not value.strip():
+        return frozenset()
+
+    try:
+        user_ids = frozenset(
+            int(item.strip()) for item in value.split(",") if item.strip()
+        )
+    except ValueError as error:
+        raise ConfigError(
+            "ALLOWED_USER_IDS must contain Telegram user IDs separated by commas"
+        ) from error
+
+    if any(user_id <= 0 for user_id in user_ids):
+        raise ConfigError("ALLOWED_USER_IDS must contain only positive integers")
+    return user_ids
 
 
 def load_settings() -> Settings:
@@ -77,6 +96,7 @@ def load_settings() -> Settings:
         gemini_model=os.getenv(
             "GEMINI_MODEL", "gemini-3.5-flash-lite"
         ).strip(),
+        allowed_user_ids=_parse_user_ids(os.getenv("ALLOWED_USER_IDS", "")),
         run_mode=run_mode,
         webhook_base_url=webhook_base_url,
         webhook_path=webhook_path,

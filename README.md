@@ -10,6 +10,7 @@ Telegram-бот з меню, інформацією про студента та
 - надсилання текстового prompt до Gemini AI;
 - локальний запуск через long polling;
 - робота на хостингу через захищений webhook.
+- доступ лише для дозволених Telegram-користувачів.
 
 ## Технології
 
@@ -69,6 +70,7 @@ pytest
 
    - `TELEGRAM_BOT_TOKEN` — токен від BotFather;
    - `GEMINI_API_KEY` — ключ Google AI Studio;
+   - `ALLOWED_USER_IDS` — дозволені числові Telegram ID через кому;
    - `WEBHOOK_SECRET` — довільний секрет лише з латинських літер, цифр,
      `_` і `-`, наприклад `lab3_webhook_secret_2026`.
 
@@ -92,6 +94,7 @@ Webhook реєструється автоматично під час запус
 | `TELEGRAM_BOT_TOKEN` | токен Telegram-бота |
 | `GEMINI_API_KEY` | ключ Gemini API |
 | `GEMINI_MODEL` | модель Gemini |
+| `ALLOWED_USER_IDS` | Telegram ID користувачів, яким дозволено доступ |
 | `RUN_MODE` | `polling` локально або `webhook` на сервері |
 | `WEBHOOK_BASE_URL` | HTTPS-адреса задеплоєного сервісу |
 | `WEBHOOK_PATH` | шлях webhook |

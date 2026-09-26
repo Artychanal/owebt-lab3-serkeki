@@ -13,6 +13,7 @@ from aiogram.webhook.aiohttp_server import (
 from app.ai_client import GeminiClient
 from app.config import ConfigError, Settings, load_settings
 from app.handlers import router
+from app.middlewares import AccessMiddleware
 
 
 def create_components(settings: Settings) -> tuple[Bot, Dispatcher]:
@@ -21,6 +22,9 @@ def create_components(settings: Settings) -> tuple[Bot, Dispatcher]:
         default=DefaultBotProperties(parse_mode=ParseMode.HTML),
     )
     dispatcher = Dispatcher()
+    dispatcher.message.outer_middleware(
+        AccessMiddleware(settings.allowed_user_ids)
+    )
     dispatcher.include_router(router)
     dispatcher["ai_client"] = GeminiClient(
         api_key=settings.gemini_api_key,
@@ -84,4 +88,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
